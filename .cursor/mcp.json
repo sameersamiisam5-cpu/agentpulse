@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "agentpulse-inspector": {
+      "command": "npx",
+      "args": [
+        "agentpulse",
+        "proxy",
+        "--",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "D:\\Agent _pulse\\agentpulse"
+      ]
+    }
+  }
+}

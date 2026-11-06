@@ -1,26 +1,42 @@
 {
   "name": "agentpulse",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "The Real-Time Observability & Circuit-Breaker Cockpit for AI Agents & MCP Servers",
+  "bin": {
+    "agentpulse": "./bin/cli.mjs"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "server": "tsx src/server/telemetry-server.ts",
+    "mock": "tsx src/server/mock-agent.ts",
+    "proxy": "tsx src/server/mcp-interceptor.ts",
+    "pulse": "concurrently -n \"SERVER,MOCK,UI\" -c \"cyan,magenta,blue\" \"npm run server\" \"npm run mock\" \"npm run dev\""
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.70.0",
     "next": "16.4.5",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "tailwind-merge": "^3.7.0",
+    "ws": "^8.22.1"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.2",
+    "concurrently": "^10.0.6",
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
+    "playwright": "^1.65.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

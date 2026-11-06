@@ -1,0 +1,14 @@
+{
+  "name": "@agentpulse/sdk",
+  "version": "0.1.0",
+  "description": "Zero-dependency TypeScript client SDK & interceptor for AgentPulse MCP telemetry",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": ["mcp", "telemetry", "ai-agent", "observability", "claude-code"],
+  "author": "Sami",
+  "license": "MIT"
+}
+
