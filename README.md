@@ -1,15 +1,22 @@
 <div align="center">
   <br />
   <h1>⚡ AgentPulse</h1>
-  <strong>The Real-Time Observability & Circuit-Breaker Cockpit for AI Agents & MCP Servers</strong>
+  <strong>The Real-Time Observability & Circuit-Breaker Cockpit for AI Agents & Model Context Protocol (MCP) Servers</strong>
   <p>Stop flying blind. Intercept, visualize, and halt recursive agent loop traps before burning API token budgets.</p>
   
   <p>
+    <a href="https://agentpulse-three.vercel.app"><b>🌐 Live Interactive Demo</b></a> •
     <a href="#quickstart">Quickstart</a> •
     <a href="#killer-features">Killer Features</a> •
-    <a href="#mcp-proxy">MCP Stdio Interceptor</a> •
+    <a href="#mcp-proxy">MCP Proxy</a> •
     <a href="#architecture">Architecture</a>
   </p>
+
+  <br />
+  <a href="https://agentpulse-three.vercel.app">
+    <img src="./public/agentpulse-preview.png" alt="AgentPulse Live Cockpit" width="100%" style="border-radius: 8px; border: 1px solid #222222;" />
+  </a>
+  <br /><br />
 </div>
 
 ---
@@ -38,7 +45,13 @@ When teams deploy autonomous coding agents (Claude Code, Cursor, Codex) and Mode
 
 ## 🚀 Quickstart
 
-Clone the repository and launch the cockpit in one command:
+Run the cockpit and simulated agent traffic in **one command**:
+
+```bash
+npx agentpulse
+```
+
+Or clone and run locally:
 
 ```bash
 git clone https://github.com/sameersamiisam5-cpu/agentpulse.git
@@ -70,7 +83,7 @@ The interceptor automatically sniffs `tools/call` JSON-RPC packets in `stdin`/`s
 ## 📦 Client SDK
 
 ```typescript
-import { AgentPulse } from "@agentpulse/sdk";
+import { AgentPulse } from "agentpulse";
 
 const pulse = new AgentPulse({ port: 4300 });
 
