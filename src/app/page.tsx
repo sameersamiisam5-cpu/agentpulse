@@ -18,7 +18,6 @@ import {
   Upload, 
   Sparkles, 
   AlertOctagon, 
-  HelpCircle,
   PlugZap 
 } from 'lucide-react';
 
@@ -130,7 +129,7 @@ export default function AgentPulseDashboard() {
       similarityRatio: 1.0,
       sessionId: "claude-code-incident-409",
       triggeredAt: Date.now(),
-      message: "Loop Trap Detected: docker_mcp_inspect was called 3 consecutive times with identical inputs!"
+      message: "Warning: The AI is calling the exact same broken tool repeatedly in an infinite loop."
     });
   };
 
@@ -146,10 +145,10 @@ export default function AgentPulseDashboard() {
           setIsPaused(true);
           setEvents(parsed);
         } else {
-          alert("Invalid trace JSON file: Expected an array of AgentPulseEvent objects.");
+          alert("Invalid file format.");
         }
       } catch (err) {
-        alert("Failed to parse JSON file.");
+        alert("Failed to read file.");
       }
     };
     reader.readAsText(file);
@@ -187,46 +186,49 @@ export default function AgentPulseDashboard() {
                 AgentPulse
               </h1>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-neutral-800 text-neutral-300 font-mono border border-neutral-700">
-                v0.1.0
+                Live AI Monitor
               </span>
             </div>
-            <p className="text-[11px] text-neutral-400">Observability & Inspection Cockpit for AI Agents</p>
+            <p className="text-[11px] text-neutral-400">See what your AI agents are doing in real-time</p>
           </div>
         </div>
 
-        {/* Actions */}
+        {/* Actions in Plain English */}
         <div className="flex items-center space-x-2 font-mono text-xs">
           <button
             onClick={() => setShowSetupGuide(true)}
-            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-900 font-semibold transition-colors"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-900 font-semibold transition-colors"
           >
             <PlugZap className="w-3.5 h-3.5" />
-            <span>Connect Agent</span>
+            <span>Connect Your AI</span>
           </button>
 
           <button
             onClick={loadSampleSession}
-            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded bg-[#181818] hover:bg-[#222222] text-neutral-300 border border-[#2a2a2a] transition-colors"
+            title="Watch a recorded example of an AI agent working"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded bg-[#181818] hover:bg-[#222222] text-neutral-300 border border-[#2a2a2a] transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5 text-neutral-400" />
-            <span>Sample Trace</span>
+            <span>See Example Run</span>
           </button>
 
           <button
             onClick={() => fileInputRef.current?.click()}
+            title="Open a saved log file"
             className="flex items-center space-x-1 px-2.5 py-1.5 rounded bg-[#181818] hover:bg-[#222222] text-neutral-400 border border-[#2a2a2a] transition-colors"
           >
             <Upload className="w-3.5 h-3.5" />
-            <span>Import</span>
+            <span>Open Log</span>
           </button>
 
           <button
             onClick={exportSessionJson}
             disabled={events.length === 0}
+            title="Save this run to a file"
             className="flex items-center space-x-1 px-2.5 py-1.5 rounded bg-[#181818] hover:bg-[#222222] text-neutral-400 border border-[#2a2a2a] disabled:opacity-30 transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export</span>
+            <span>Save</span>
           </button>
 
           <button
@@ -249,60 +251,65 @@ export default function AgentPulseDashboard() {
 
       {/* Main Container */}
       <main className="flex-1 p-5 max-w-7xl w-full mx-auto flex flex-col">
-        {/* Circuit Breaker Alert Banner */}
+        {/* Simple Plain-English Alert Banner */}
         {loopAlert && (
-          <div className="mb-4 p-3.5 rounded-lg bg-[#141010] border border-red-500/40 flex items-center justify-between font-mono text-xs">
+          <div className="mb-4 p-3.5 rounded-lg bg-[#141010] border border-red-500/40 flex items-center justify-between text-xs">
             <div className="flex items-center space-x-2.5">
               <AlertOctagon className="w-4 h-4 text-red-400 shrink-0" />
               <div>
-                <span className="font-semibold text-red-400 uppercase tracking-wider block">
-                  Circuit Breaker: Heuristic Loop Trap
+                <span className="font-semibold text-red-400 uppercase tracking-wider block font-mono">
+                  Infinite Loop Stopped! (Money Saver)
                 </span>
                 <span className="text-neutral-300 text-[11px]">
-                  Tool [{loopAlert.toolName}] invoked {loopAlert.consecutiveCount} consecutive times with identical parameters.
+                  The AI was trapped repeating the exact same failed action ({loopAlert.toolName}) over and over. AgentPulse flagged it to stop token waste.
                 </span>
               </div>
             </div>
             <button
               onClick={() => setLoopAlert(null)}
-              className="text-[11px] px-2.5 py-1 rounded bg-[#221515] hover:bg-[#2f1b1b] text-red-300 border border-red-500/30 transition-colors"
+              className="text-[11px] px-2.5 py-1 rounded bg-[#221515] hover:bg-[#2f1b1b] text-red-300 border border-red-500/30 transition-colors font-mono"
             >
               Dismiss
             </button>
           </div>
         )}
 
-        {/* KPI Metric Gauges */}
+        {/* 6 Simple KPI Gauges */}
         <MetricBar stats={stats} connected={connected} />
 
-        {/* Filter View Bar */}
-        <div className="flex items-center justify-between mb-2.5 font-mono text-xs">
+        {/* Simple Filter Tabs */}
+        <div className="flex items-center justify-between mb-2.5 text-xs font-mono">
           <div className="flex items-center space-x-1.5">
             <span className="text-neutral-400 text-[11px] mr-1 flex items-center space-x-1">
               <Filter className="w-3 h-3 text-neutral-400" />
-              <span>Filter:</span>
+              <span>Show:</span>
             </span>
-            {(['all', 'tools', 'thoughts', 'errors'] as const).map((tab) => (
+            {[
+              { id: 'all', label: 'Everything' },
+              { id: 'tools', label: 'Actions Only' },
+              { id: 'thoughts', label: 'AI Thinking Only' },
+              { id: 'errors', label: 'Mistakes Only' },
+            ].map((tab) => (
               <button
-                key={tab}
-                onClick={() => setFilterType(tab)}
-                className={`text-[11px] px-2.5 py-0.5 rounded capitalize transition-all ${
-                  filterType === tab
+                key={tab.id}
+                onClick={() => setFilterType(tab.id)}
+                className={`text-[11px] px-2.5 py-0.5 rounded transition-all ${
+                  filterType === tab.id
                     ? 'bg-neutral-200 text-neutral-900 font-semibold'
                     : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#181818]'
                 }`}
               >
-                {tab}
+                {tab.label}
               </button>
             ))}
           </div>
 
           <div className="text-[11px] text-neutral-400">
-            {filteredEvents.length} / {events.length} events
+            Showing {filteredEvents.length} of {events.length} actions
           </div>
         </div>
 
-        {/* Live Waterfall Timeline */}
+        {/* Live Timeline in Plain Words */}
         <div className="flex-1">
           <Waterfall
             events={filteredEvents}
