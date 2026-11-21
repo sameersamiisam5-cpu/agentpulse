@@ -30,12 +30,20 @@ export async function POST() {
         const dir = path.dirname(target.path);
         if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-        let config: any = { mcpServers: {} };
-        if (fs.existsSync(target.path)) {
+        interface McpConfig {
+          mcpServers: Record<string, { command: string; args: string[] }>;
+          [key: string]: unknown;
+        }
+
+        let config: McpConfig = { mcpServers: {} };
+        if (fs.existsSync(/*turbopackIgnore: true*/ target.path)) {
           try {
-            config = JSON.parse(fs.readFileSync(target.path, 'utf8'));
-            if (!config.mcpServers) config.mcpServers = {};
-          } catch (e) {
+            const parsed = JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ target.path, 'utf8'));
+            config = {
+              ...parsed,
+              mcpServers: parsed?.mcpServers && typeof parsed.mcpServers === 'object' ? parsed.mcpServers : {}
+            };
+          } catch {
             config = { mcpServers: {} };
           }
         }
@@ -47,12 +55,13 @@ export async function POST() {
 
         fs.writeFileSync(target.path, JSON.stringify(config, null, 2), 'utf8');
         hooked.push(target.name);
-      } catch (e) {}
+      } catch {}
     }
 
     return NextResponse.json({ success: true, hooked });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown internal error';
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 
